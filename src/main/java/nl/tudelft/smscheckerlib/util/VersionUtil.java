@@ -1,0 +1,40 @@
+package nl.tudelft.smscheckerlib.util;
+
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+public final class VersionUtil {
+    private VersionUtil() {
+    }
+
+    private static final Logger LOGGER = LoggerUtil.getLogger();
+
+    public static final String VERSION;
+    public static final String BRANCH;
+    public static final String SHORT_COMMIT_HASH;
+    public static final String COMMIT_HASH;
+
+    static {
+        String version, branch, shortCommitHash, commitHash;
+        version = branch = shortCommitHash = commitHash = "unknown";
+        //noinspection DataFlowIssue
+        try (InputStreamReader reader = new InputStreamReader(VersionUtil.class.getResourceAsStream("build_info.json"))) {
+            JsonObject object = JsonParser.parseReader(reader).getAsJsonObject();
+            version = object.get("version").getAsString();
+            branch = object.get("branch").getAsString();
+            shortCommitHash = object.get("shortCommitHash").getAsString();
+            commitHash = object.get("commitHash").getAsString();
+        } catch (RuntimeException | IOException e) {
+            LOGGER.log(Level.SEVERE, "Error while reading build_info.json", e);
+        }
+        VERSION = version;
+        BRANCH = branch;
+        SHORT_COMMIT_HASH = shortCommitHash;
+        COMMIT_HASH = commitHash;
+    }
+}

@@ -1,0 +1,64 @@
+import nl.tudelft.smscheckerlib.buildscript.GenerateBuildInfoTask
+
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+}
+
+base {
+    archivesName = project.archives_base_name
+    version = project.lib_version
+    group = project.maven_group
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // This dependency is exported to consumers, that is to say found on their compile classpath.
+    // api ...
+
+    // This dependency is used internally, and not exposed to consumers on their own compile classpath.
+    implementation "com.google.code.gson:gson:${project.gson_version}"
+    implementation "com.google.guava:guava:${project.guava_version}-jre"
+}
+
+tasks.register('generateBuildInfo', GenerateBuildInfoTask) {
+    outputFile = new File(temporaryDir, "build_info.json")
+}
+
+processResources {
+    from("LICENSE") {
+        rename {"${it}_${project.base.archivesName.get()}"}
+    }
+
+    from generateBuildInfo
+}
+
+testing {
+    suites {
+        test {
+            useJUnitJupiter(project.junit_version)
+        }
+    }
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(25)
+    }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifactId = project.base.archivesName.get()
+            from components.java
+        }
+    }
+
+    repositories {
+
+    }
+}
