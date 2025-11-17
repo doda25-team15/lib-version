@@ -23,7 +23,7 @@ public final class VersionUtil {
         String version, branch, shortCommitHash, commitHash;
         version = branch = shortCommitHash = commitHash = "unknown";
         //noinspection DataFlowIssue
-        try (InputStreamReader reader = new InputStreamReader(VersionUtil.class.getResourceAsStream("build_info.json"))) {
+        try (InputStreamReader reader = new InputStreamReader(VersionUtil.class.getResourceAsStream("/build_info.json"))) {
             JsonObject object = JsonParser.parseReader(reader).getAsJsonObject();
             version = object.get("version").getAsString();
             branch = object.get("branch").getAsString();
