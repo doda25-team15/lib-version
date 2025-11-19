@@ -1,4 +1,4 @@
-package nl.tudelft.smscheckerlib.util;
+package nl.tudelft.libversion.util;
 
 import java.util.logging.Logger;
 

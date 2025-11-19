@@ -1,4 +1,4 @@
-import nl.tudelft.smscheckerlib.buildscript.GenerateBuildInfoTask
+import nl.tudelft.libversion.buildscript.GenerateBuildInfoTask
 
 plugins {
     id 'java-library'

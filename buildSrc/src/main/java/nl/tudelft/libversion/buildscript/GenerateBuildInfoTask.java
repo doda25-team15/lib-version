@@ -1,4 +1,4 @@
-package nl.tudelft.smscheckerlib.buildscript;
+package nl.tudelft.libversion.buildscript;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;

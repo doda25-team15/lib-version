@@ -1,4 +1,4 @@
-package nl.tudelft.smscheckerlib.util;
+package nl.tudelft.libversion.util;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;

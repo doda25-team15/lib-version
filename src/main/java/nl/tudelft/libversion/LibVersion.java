@@ -1,12 +1,12 @@
-package nl.tudelft.smscheckerlib;
+package nl.tudelft.libversion;
 
-import nl.tudelft.smscheckerlib.util.LoggerUtil;
-import nl.tudelft.smscheckerlib.util.VersionUtil;
+import nl.tudelft.libversion.util.LoggerUtil;
+import nl.tudelft.libversion.util.VersionUtil;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class SmsCheckerLib {
+public class LibVersion {
 
     private static final Logger LOGGER = LoggerUtil.getLogger();
 
