@@ -1,13 +1,35 @@
 import nl.tudelft.libversion.buildscript.GenerateBuildInfoTask
+import java.text.SimpleDateFormat
 
 plugins {
     id 'java-library'
     id 'maven-publish'
 }
 
+def branch = System.getenv("GITHUB_REF_NAME") ?: "local"
+def isMain = branch == "main"
+
+// baseVersion comes from gradle.properties (required!)
+def baseVersion = project.findProperty("baseVersion") ?: "1.0.0"
+
+// timestamp for strictly increasing pre-releases
+def timestamp() {
+    return new SimpleDateFormat("yyMMdd-HHmmss").format(new Date())
+}
+
+if (isMain) {
+    // main branch always has SNAPSHOT
+    project.ext.calculatedVersion = "${baseVersion}-SNAPSHOT"
+} else {
+    // safe branch name
+    def safeBranch = branch.replaceAll("[^A-Za-z0-9-]", "-")
+    project.ext.calculatedVersion = "${baseVersion}-${safeBranch}-${timestamp()}"
+}
+
 base {
     archivesName = project.archives_base_name
-    version = project.lib_version
+    // <<< IMPORTANT: use the calculated dynamic version
+    version = project.calculatedVersion
     group = project.maven_group
 }
 
@@ -16,10 +38,6 @@ repositories {
 }
 
 dependencies {
-    // This dependency is exported to consumers, that is to say found on their compile classpath.
-    // api ...
-
-    // This dependency is used internally, and not exposed to consumers on their own compile classpath.
     implementation "com.google.code.gson:gson:${project.gson_version}"
     implementation "com.google.guava:guava:${project.guava_version}-jre"
 }
@@ -32,7 +50,6 @@ processResources {
     from("LICENSE") {
         rename {"${it}_${project.base.archivesName.get()}"}
     }
-
     from generateBuildInfo
 }
 
@@ -59,7 +76,6 @@ publishing {
             from components.java
         }
     }
-
     repositories {
         maven {
             name = "GitHubPackages"
