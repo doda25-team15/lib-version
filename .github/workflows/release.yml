@@ -16,7 +16,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.ref }}
+          ref: main # assume the just now pushed tag always points to latest commit on main
           fetch-depth: 0  # fetch full history so that `git branch --show-current` works
 
       - name: Set up JDK
