@@ -13,11 +13,17 @@ jobs:
       packages: write
 
     steps:
+      - uses: actions/create-github-app-token@v2
+        id: app-token
+        with:
+          app-id: ${{ vars.DODA_APP_ID }}
+          private-key: ${{ secrets.DODA_APP_PRIVATE_KEY }}
       - name: Checkout code
         uses: actions/checkout@v4
         with:
           ref: main # assume the just now pushed tag always points to latest commit on main
-          fetch-depth: 0  # fetch full history so that `git branch --show-current` works
+          fetch-depth: 0 # fetch full history so that `git branch --show-current` works
+          token: ${{ steps.app-token.outputs.token }}
 
       - name: Set up JDK
         uses: actions/setup-java@v4
