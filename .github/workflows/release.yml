@@ -54,7 +54,7 @@ jobs:
 
       - name: Update gradle.properties to next SNAPSHOT
         run: |
-          sed -i "s/^baseVersion=.*/baseVersion=${{ steps.bump.outputs.next }}/" gradle.properties
+          sed -i "s/^baseVersion=.*/baseVersion=${{ steps.bump.outputs.next }}-SNAPSHOT/" gradle.properties
 
       - name: Commit version bump
         uses: stefanzweifel/git-auto-commit-action@v5
