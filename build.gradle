@@ -6,8 +6,9 @@ plugins {
     id 'maven-publish'
 }
 
-def branch = System.getenv("GITHUB_REF_NAME") ?: "local"
-def isMain = branch == "main"
+def ref = System.getenv("GITHUB_REF_NAME") ?: "local"
+def isTag = ref.matches("v\\d+\\.\\d+\\.\\d+")
+def isMain = ref == "main"
 
 // baseVersion comes from gradle.properties (required!)
 def baseVersion = project.findProperty("baseVersion") ?: "1.0.0"
@@ -17,12 +18,12 @@ def timestamp() {
     return new SimpleDateFormat("yyMMdd-HHmmss").format(new Date())
 }
 
-if (isMain) {
-    // main branch always has SNAPSHOT
-    project.ext.calculatedVersion = "${baseVersion}-SNAPSHOT"
+if (isTag || isMain) {
+    // Stable release from tag or main branch
+    project.ext.calculatedVersion = baseVersion
 } else {
-    // safe branch name
-    def safeBranch = branch.replaceAll("[^A-Za-z0-9-]", "-")
+    // Branch pre-release with timestamp
+    def safeBranch = ref.replaceAll("[^A-Za-z0-9-]", "-")
     project.ext.calculatedVersion = "${baseVersion}-${safeBranch}-${timestamp()}"
 }
 
